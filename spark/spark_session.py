@@ -1,13 +1,4 @@
 from pyspark.sql import SparkSession
-from pyspark.ml.feature import VectorAssembler
-from pyspark.ml.regression import LinearRegression
-
-spark = SparkSession.builder \
-    .appName("KafkaBatchProcessing") \
-    .getOrCreate()
-
-batch_data = spark.read.json("../kafka/limited_batch_data.json")
-from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, FloatType
 from pyspark.ml.feature import VectorAssembler, StandardScaler
 from pyspark.ml.clustering import KMeans
@@ -75,25 +66,21 @@ print(f"Silhouette Score for K-Means: {silhouette_score}")
 # Tampilkan hasil clustering
 kmeans_predictions.select("transID", "payAmount", "prediction").show(10)
 
+# Simpan hasil clustering ke dalam satu file CSV
+kmeans_predictions.select("transID", "payAmount", "prediction") \
+    .coalesce(1) \
+    .write.csv("clustering_results", header=True, mode="overwrite")
+
 # Hentikan Spark session setelah selesai
 spark.stop()
 
-batch_data.show(5)
 
-features = ["payAmount"]
-assembler = VectorAssembler(inputCols=features, outputCol="features")
 
-data = assembler.transform(batch_data).select("features", "payAmount")
+import shutil
+from google.colab import files
 
-train_data, test_data = data.randomSplit([0.8, 0.2])
+# Membuat ZIP dari folder clustering_results
+shutil.make_archive("clustering_results", "zip", "clustering_results")
 
-lr = LinearRegression(labelCol="payAmount", featuresCol="features")
-lr_model = lr.fit(train_data)
-
-predictions = lr_model.transform(test_data)
-predictions.show(5)
-
-rmse = lr_model.summary.rootMeanSquaredError
-print(f"Root Mean Squared Error (RMSE): {rmse}")
-
-spark.stop()
+# Mengunduh file ZIP
+files.download("clustering_results.zip")
