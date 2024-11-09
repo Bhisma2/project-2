@@ -1,42 +1,42 @@
 from kafka import KafkaConsumer
 import json
 import csv
+import datetime
 
-# Inisialisasi Kafka Consumer
 consumer = KafkaConsumer(
-    'bus_transaction_data',  # Nama topik Kafka yang sama dengan producer
+    'bus_transaction_data', 
     bootstrap_servers='localhost:9092',
     value_deserializer=lambda x: json.loads(x.decode('utf-8')),
-    consumer_timeout_ms=5000  # Timeout jika tidak ada pesan baru dalam 5 detik
+    consumer_timeout_ms=900000
 )
 
-# Fungsi untuk memproses sejumlah data
-def consume_data_with_timeout(limit=10):
-    count = 0
+def consume_data_in_time_batches(batch_duration_minutes=5, max_batches=3):
     batch = []
+    batch_number = 1  
+    start_time = datetime.datetime.now()
 
-    for message in consumer:
-        batch.append(message.value)
-        print(f"Received: {message.value}")
-        count += 1
-        
-        # Berhenti jika sudah mencapai batas limit
-        if count >= limit:
-            break
-    
-    # Simpan batch ke file JSON untuk verifikasi
-    if batch:
-        with open('limited_batch_data.json', 'w') as json_file:
-            json.dump(batch, json_file, indent=2)
-        print("Batch data saved to limited_batch_data.json")
+    while batch_number <= max_batches: 
+        for message in consumer:
+            batch.append(message.value)
 
-        # Simpan batch ke file CSV
-        with open('limited_batch_data.csv', 'w', newline='') as csv_file:
-            # Mengambil header dari kunci data pertama
-            writer = csv.DictWriter(csv_file, fieldnames=batch[0].keys())
-            writer.writeheader()
-            writer.writerows(batch)
-        print("Batch data saved to limited_batch_data.csv")
+            current_time = datetime.datetime.now()
+            elapsed_time = (current_time - start_time).total_seconds() / 60 
+
+            if elapsed_time >= batch_duration_minutes:
+                file_name = f'batch_{batch_number}.csv'
+                with open(file_name, 'w', newline='') as csv_file:
+                    writer = csv.DictWriter(csv_file, fieldnames=batch[0].keys())
+                    writer.writeheader()
+                    writer.writerows(batch)
+                print(f"Batch {batch_number} saved to {file_name}")
+
+                batch = []
+                batch_number += 1
+                start_time = datetime.datetime.now()
+
+                if batch_number > max_batches:
+                    print("Konsumsi selesai hingga batch 3.")
+                    return
 
 if __name__ == "__main__":
-    consume_data_with_timeout()
+    consume_data_in_time_batches()

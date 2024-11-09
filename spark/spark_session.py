@@ -4,12 +4,10 @@ from pyspark.ml.feature import VectorAssembler, StandardScaler
 from pyspark.ml.clustering import KMeans
 from pyspark.ml.evaluation import ClusteringEvaluator
 
-# Inisialisasi SparkSession
 spark = SparkSession.builder \
     .appName("TransactionClusteringApplication") \
     .getOrCreate()
 
-# Definisikan schema untuk file CSV
 schema = StructType([
     StructField("transID", StringType(), True),
     StructField("payCardID", StringType(), True),
@@ -35,52 +33,53 @@ schema = StructType([
     StructField("payAmount", FloatType(), True)
 ])
 
-# Membaca batch data dari file CSV dengan schema
-batch_data = spark.read.csv("limited_batch_data.csv", header=True, schema=schema)
+batch_files = ["batch_1.csv", "batch_2.csv", "batch_3.csv"]
 
-# Tampilkan beberapa baris data untuk verifikasi
-batch_data.show(5)
+for i, batch_file in enumerate(batch_files, 1):
+    print(f"\nMemproses {batch_file}...")
 
-# Pilih kolom numerik yang relevan untuk clustering
-featureCols = ["payAmount"]
-assembler = VectorAssembler(inputCols=featureCols, outputCol="features", handleInvalid="skip")
-assembled_df = assembler.transform(batch_data)
+    batch_data = spark.read.csv(batch_file, header=True, schema=schema)
 
-# Standardisasi fitur
-standardScaler = StandardScaler(inputCol="features", outputCol="features_scaled")
-scaled_df = standardScaler.fit(assembled_df).transform(assembled_df)
+    featureCols = ["payAmount"]
+    assembler = VectorAssembler(inputCols=featureCols, outputCol="features", handleInvalid="skip")
+    assembled_df = assembler.transform(batch_data)
 
-# Inisialisasi dan latih model K-Means
-k = 2  # Jumlah cluster, bisa disesuaikan
-kmeans = KMeans(featuresCol='features_scaled', k=k, seed=23)
-kmeans_model = kmeans.fit(scaled_df)
+    standardScaler = StandardScaler(inputCol="features", outputCol="features_scaled")
+    scaled_df = standardScaler.fit(assembled_df).transform(assembled_df)
 
-# Prediksi cluster menggunakan K-Means
-kmeans_predictions = kmeans_model.transform(scaled_df)
+    k = 2
+    kmeans = KMeans(featuresCol='features_scaled', k=k, seed=23)
+    kmeans_model = kmeans.fit(scaled_df)
 
-# Evaluasi model K-Means menggunakan Silhouette Score
-evaluator = ClusteringEvaluator(featuresCol='features_scaled', metricName='silhouette', distanceMeasure='squaredEuclidean')
-silhouette_score = evaluator.evaluate(kmeans_predictions)
-print(f"Silhouette Score for K-Means: {silhouette_score}")
+    kmeans_predictions = kmeans_model.transform(scaled_df)
 
-# Tampilkan hasil clustering
-kmeans_predictions.select("transID", "payAmount", "prediction").show(10)
+    evaluator = ClusteringEvaluator(featuresCol='features_scaled', metricName='silhouette', distanceMeasure='squaredEuclidean')
+    silhouette_score = evaluator.evaluate(kmeans_predictions)
+    print(f"Silhouette Score for {batch_file}: {silhouette_score}")
 
-# Simpan hasil clustering ke dalam satu file CSV
-kmeans_predictions.select("transID", "payAmount", "prediction") \
-    .coalesce(1) \
-    .write.csv("clustering_results", header=True, mode="overwrite")
+    kmeans_predictions.select("transID", "payAmount", "prediction").show(10)
 
-# Hentikan Spark session setelah selesai
+    output_path = f"clustering_results_batch_{i}"
+    kmeans_predictions.select("transID", "payAmount", "prediction") \
+        .coalesce(1) \
+        .write.csv(output_path, header=True, mode="overwrite")
+    print(f"Hasil clustering disimpan di {output_path}")
+
 spark.stop()
 
 
 
 import shutil
 from google.colab import files
+import os
 
-# Membuat ZIP dari folder clustering_results
-shutil.make_archive("clustering_results", "zip", "clustering_results")
+main_output_folder = "clustering_results_alls"
+os.makedirs(main_output_folder, exist_ok=True)
 
-# Mengunduh file ZIP
+batch_folders = ["clustering_results_batch_1", "clustering_results_batch_2", "clustering_results_batch_3"]
+for batch_folder in batch_folders:
+    shutil.move(batch_folder, main_output_folder)
+
+shutil.make_archive("clustering_results", "zip", main_output_folder)
+
 files.download("clustering_results.zip")
