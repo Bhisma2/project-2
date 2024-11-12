@@ -29,12 +29,11 @@ Atur konfigurasi docker pada file `docker-compose.yaml` sesuai kebutuhan kemudia
 
 2. Setup Producer dan Consumer
 Buat script untuk menjalankan skenario producer dan consumer. Pastikan consumer dapat menerima aliran data yang dikirim producer berdasarkan dataset yang tersedia.
-```bash
-cd kafka
-python3 producer.py
-python3 consumer.py
-```
-
+  ```bash
+  cd kafka
+  python3 producer.py
+  python3 consumer.py
+  ```
 **producer.py**
 ![Screenshot 2024-11-12 171535](https://github.com/user-attachments/assets/b661680b-0f9f-445b-b5d2-677602b0e84c)
 
