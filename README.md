@@ -25,7 +25,7 @@ Dataset ini adalah **simulasi** dan **tidak mencerminkan data asli** Transjakart
 
 1. Setup Docker
 Atur konfigurasi docker pada file `docker-compose.yaml` sesuai kebutuhan kemudian jalankan command `docker-compose up -f` untuk menjalankan service yang dibutuhkan
-![alt text](<Screenshot 2024-11-12 170005.png>)
+![Screenshot 2024-11-12 170005](https://github.com/user-attachments/assets/8621e415-d53b-44fd-aa31-29301b653772)
 
 2. Setup Producer dan Consumer
 Buat script untuk menjalankan skenario producer dan consumer. Pastikan consumer dapat menerima aliran data yang dikirim producer berdasarkan dataset yang tersedia.
@@ -34,3 +34,11 @@ cd kafka
 python3 producer.py
 python3 consumer.py
 ```
+
+**producer.py**
+![Screenshot 2024-11-12 171535](https://github.com/user-attachments/assets/b661680b-0f9f-445b-b5d2-677602b0e84c)
+
+**consumer.py**
+![Screenshot 2024-11-12 171553](https://github.com/user-attachments/assets/e502adf5-e32d-4023-94ec-5e431cf098dd)
+
+
