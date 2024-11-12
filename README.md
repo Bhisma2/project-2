@@ -40,4 +40,72 @@ Buat script untuk menjalankan skenario producer dan consumer. Pastikan consumer 
 **consumer.py**
 ![Screenshot 2024-11-12 171553](https://github.com/user-attachments/assets/e502adf5-e32d-4023-94ec-5e431cf098dd)
 
+3. Modelling Data
+
+Terdapat 3 model dengan skema sebagai berikut:
+- Model 1: 1/3 data pertama
+- Model 2: 1/3 data pertama + 1/3 data kedua
+- Model 3: 1/3 data pertama + 1/3 data kedua + 1/3 data terakhir (semua data)
+
+Kemudian data ini akan di training dengan menggunakan algoritma K-Means dan hasil terbaik akan disimpan dalam bentuk `.csv` dan digunakan dalam endpoint
+
+4. Routing Endpoints
+
+Membuat file index.js untuk membuat endpoint 
+
+## Hasil
+
+### A. Endpoint for a specific transID
+
+1. endpoint yang digunakan `'/api/clustering-results/:transID'`
+2. Hasil
+- Request
+```bash
+http://localhost:3000/api/clustering-results/YFYK070A9C91UE
+```
+- Response
+```bash
+{
+  "transID": "YFYK070A9C91UE",
+  "payCardBank": "dki",
+  "payAmount": "3500.0",
+  "prediction": "0"
+}
+```
+
+### B. Endpoint for a specific payAmount
+1. endpoint yang digunakan `/api/clustering-by-payAmount/:payAmount`
+2. Hasil
+- Request
+```bash
+http://localhost:3000/api/clustering-by-payAmount/3500.0
+```
+- Response
+```bash
+  {
+    "transID": "EIIW227B8L34VB",
+    "payCardBank": "emoney",
+    "payAmount": "3500.0",
+    "prediction": "4"
+  },
+```
+
+### C. Endpoint Filter results by payCardBank
+1. endpoint yang digunakan `'/api/clustering-by-payCardBank/:payCardBank'`
+2. Hasil
+- Request
+```bash
+http://localhost:3000/api/clustering-by-payCardBank/dki
+```
+- Response
+```bash
+  {
+    "transID": "LGXO740D2N47GZ",
+    "payCardBank": "dki",
+    "payAmount": "3500.0",
+    "prediction": "0"
+  },
+```
+
+
 
