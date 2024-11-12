@@ -43,9 +43,9 @@ Buat script untuk menjalankan skenario producer dan consumer. Pastikan consumer 
 3. Modelling Data
 
 Terdapat 3 model dengan skema sebagai berikut:
-- Model 1: 1/3 data pertama
-- Model 2: 1/3 data pertama + 1/3 data kedua
-- Model 3: 1/3 data pertama + 1/3 data kedua + 1/3 data terakhir (semua data)
+- Model 1: 5 menit pertama
+- Model 2: 5 menit pertama + 5 menit kedua
+- Model 3: 15 menit pertama + 5 menit kedua + 5 menit terakhir (semua data)
 
 Kemudian data ini akan di training dengan menggunakan algoritma K-Means dan hasil terbaik akan disimpan dalam bentuk `.csv` dan digunakan dalam endpoint
 
