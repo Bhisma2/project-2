@@ -43,14 +43,16 @@ Buat script untuk menjalankan skenario producer dan consumer. Pastikan consumer 
 3. Modelling Data
 
 Terdapat 3 model dengan skema sebagai berikut:
-- Model 1: Batch 1
-- Model 2: Batch 1 + Batch 2
-- Model 3: Batch 1 + Batch 2 + Batch 3
+Model 1: Menggunakan data selama 5 menit pertama.
+Model 2: Menggunakan data selama 5 menit kedua.
+Model 3: Menggunakan data selama 5 menit ketiga.
 
 Hasilnya runningnya sebagai berikut :
-![image](https://github.com/user-attachments/assets/03ae37bd-49e8-41e3-9608-35b1ce341f2d)
-![image](https://github.com/user-attachments/assets/d3a20188-3787-4adc-a034-5812578e7111)
-![image](https://github.com/user-attachments/assets/e1652c68-5cce-438a-9800-e10bf22b98da)
+![image](https://github.com/user-attachments/assets/f91ca132-e1ec-4e7f-ba01-feb2fe954144)
+![image](https://github.com/user-attachments/assets/6e275143-ae35-4f47-9b05-702c70456db1)
+![image](https://github.com/user-attachments/assets/6559230e-c58a-49b3-812c-274082d4f530)
+
+
 
 Berdasarkan training ini didapatkan hasil akurasi terbaik yaitu dengan menggunakan 2 batch dengan Best Silhouette Score for Model 2 with k=2: 0.7848913932070153 
 
