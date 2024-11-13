@@ -47,6 +47,13 @@ Terdapat 3 model dengan skema sebagai berikut:
 - Model 2: Batch 1 + Batch 2
 - Model 3: Batch 1 + Batch 2 + Batch 3
 
+Hasilnya runningnya sebagai berikut :
+![image](https://github.com/user-attachments/assets/03ae37bd-49e8-41e3-9608-35b1ce341f2d)
+![image](https://github.com/user-attachments/assets/d3a20188-3787-4adc-a034-5812578e7111)
+![image](https://github.com/user-attachments/assets/e1652c68-5cce-438a-9800-e10bf22b98da)
+
+Berdasarkan training ini didapatkan hasil akurasi terbaik yaitu dengan menggunakan 2 batch dengan Best Silhouette Score for Model 2 with k=2: 0.7848913932070153 
+
 Kemudian data ini akan di training dengan menggunakan algoritma K-Means dan hasil terbaik akan disimpan dalam bentuk `.csv` dan digunakan dalam endpoint
 
 4. Routing Endpoints
