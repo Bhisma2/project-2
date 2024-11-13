@@ -62,7 +62,34 @@ Membuat file index.js untuk membuat endpoint
 
 ## Hasil
 
-### A. Endpoint for a specific transID
+### A. Endpoint for a All Clustering Result
+
+1. endpoint yang digunakan `'/api/clustering-results/'`
+2. Hasil
+- Request
+```bash
+http://localhost:3000/api/clustering-results/
+```
+- Response
+```bash
+{
+    "transID": "EIIW227B8L34VB",
+    "payCardBank": "emoney",
+    "payAmount": "3500.0",
+    "prediction": "4"
+  },
+  {
+    "transID": "LGXO740D2N47GZ",
+    "payCardBank": "dki",
+    "payAmount": "3500.0",
+    "prediction": "0"
+  },
+```
+
+![WhatsApp Image 2024-11-13 at 09 52 09_429162a2](https://github.com/user-attachments/assets/adfb7fa2-584e-4882-8dc5-16ba316d9598)
+
+
+### B. Endpoint for a specific transID
 
 1. endpoint yang digunakan `'/api/clustering-results/:transID'`
 2. Hasil
@@ -79,8 +106,11 @@ http://localhost:3000/api/clustering-results/YFYK070A9C91UE
   "prediction": "0"
 }
 ```
+![WhatsApp Image 2024-11-13 at 09 52 09_4b40cd85](https://github.com/user-attachments/assets/2ff0c9c9-7173-46d5-b49b-e11d3ddf7076)
 
-### B. Endpoint for a specific payAmount
+
+
+### C. Endpoint for a specific payAmount
 1. endpoint yang digunakan `/api/clustering-by-payAmount/:payAmount`
 2. Hasil
 - Request
@@ -97,7 +127,10 @@ http://localhost:3000/api/clustering-by-payAmount/3500.0
   },
 ```
 
-### C. Endpoint Filter results by payCardBank
+![WhatsApp Image 2024-11-13 at 09 52 09_53b8f96f](https://github.com/user-attachments/assets/65dc8aee-749f-4073-9e11-853306338c9b)
+
+
+### D. Endpoint Filter results by payCardBank
 1. endpoint yang digunakan `'/api/clustering-by-payCardBank/:payCardBank'`
 2. Hasil
 - Request
@@ -113,6 +146,9 @@ http://localhost:3000/api/clustering-by-payCardBank/dki
     "prediction": "0"
   },
 ```
+![WhatsApp Image 2024-11-13 at 09 52 09_999537c1](https://github.com/user-attachments/assets/ea7b8498-671b-4f16-84b5-16b2ed3ab3cd)
+
+![WhatsApp Image 2024-11-13 at 09 54 05_0dcc7e6e](https://github.com/user-attachments/assets/4c48be17-a781-46bb-9146-361d2d2d2a0d)
 
 
 
